@@ -1,9 +1,9 @@
 <html lang="en">
     <head>
         <title>OCPP ChargePoint Simulator</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <style>
             body {
                 padding-top: 5rem;
@@ -56,7 +56,6 @@
                 </div>
 
                 <div class="tab-pane active" id="tabcpsim">
-
                     <div class="row mt-4">
                         <div class="col-sm-4">
                             <button id="connect" type="button" class="btn btn-primary btn-block">Connect</button>
@@ -71,316 +70,326 @@
                             <div class="card w-100">
                                 <div class="card-body">
                                     <p><label>Server Status:</label>
-                                    <span id="badge_available" class="indicator badge badge-success">Authorized</span>
-                                    <span id="badge_connected" class="indicator badge badge-warning">Connected</span>
-                                    <span id="badge_connecting" class="indicator badge badge-secondary">Connecting</span>
-                                    <span id="badge_disconnected" class="indicator badge badge-light">Disconnected</span>
-                                    <span id="badge_error" class="indicator badge badge-danger">Error</span>
+                                        <span id="badge_available" class="indicator badge badge-success">Authorized</span>
+                                        <span id="badge_connected" class="indicator badge badge-warning">Connected</span>
+                                        <span id="badge_connecting" class="indicator badge badge-secondary">Connecting</span>
+                                        <span id="badge_disconnected" class="indicator badge badge-light">Disconnected</span>
+                                        <span id="badge_error" class="indicator badge badge-danger">Error</span>
                                         <span id="badge_transaction" class="indicator badge badge-primary">In Transaction</span></p>     
                                     <div class="form-group">
                                         <label for="CP0_STATUS">CP Status (Connector 0):</label>
                                         <div class="d-flex">
-                                        <select id="CP0_STATUS" class="form-control" style="max-width: 16ch; margin-right:1ch;">
-                                            <option value="Available">Available</option>
-                                            <option value="Unavailable">Unavailable</option>
-                                            <option value="Faulted">Faulted</option>
-                                        </select>
-                                        <button id="status0" type="button" class="btn btn-primary">Status Notification</button>
+                                            <select id="CP0_STATUS" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                                <option value="Available">Available</option>
+                                                <option value="Unavailable">Unavailable</option>
+                                                <option value="Faulted">Faulted</option>
+                                            </select>
+                                            <button id="status0" type="button" class="btn btn-primary">Status Notification</button>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="CP1_STATUS">Connector 1 Status:</label>
                                         <div class="d-flex inner">
-                                        <select id="CP1_STATUS" class="form-control" style="max-width: 16ch; margin-right:1ch;">
-                                            <option value="Available">Available</option>
-                                            <option value="Preparing">Preparing</option>
-                                            <option value="Charging">Charging</option>
-                                            <option value="SuspendedEV">Suspended EV</option>
-                                            <option value="SuspendedEVSE">Suspended EVSE</option>
-                                            <option value="Finishing">Finishing</option>
-                                            <option value="Reserved">Reserved</option>
-                                            <option value="Unavailable">Unavailable</option>
-                                            <option value="Faulted">Faulted</option>
-                                        </select>
-                                        <button id="status1" type="button" class="btn btn-primary">Status Notification</button>
+                                            <select id="CP1_STATUS" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                                <option value="Available">Available</option>
+                                                <option value="Preparing">Preparing</option>
+                                                <option value="Charging">Charging</option>
+                                                <option value="SuspendedEV">Suspended EV</option>
+                                                <option value="SuspendedEVSE">Suspended EVSE</option>
+                                                <option value="Finishing">Finishing</option>
+                                                <option value="Reserved">Reserved</option>
+                                                <option value="Unavailable">Unavailable</option>
+                                                <option value="Faulted">Faulted</option>
+                                            </select>
+                                            <button id="status1" type="button" class="btn btn-primary">Status Notification</button>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="metervalue">Meter value: </label>
                                         <div class="d-flex">
-                                        <input type="text" id="metervalue" type="text" name="mv" value="1" style="max-width: 12ch">
-                                        <div class="input-group-btn">
-                                        <button id="mvplus" class="btn btn-secondary"><span class="fa fa-plus"></span></button>
-                                        <button id="mv" type="button" class="btn btn-primary" style="margin-left: 1ch">Send Meter Value</button>
-                                        </div>
-                                        
+                                            <input type="text" id="metervalue" type="text" name="mv" value="1" style="max-width: 12ch">
+                                            <div class="input-group-btn">
+                                                <button id="mvplus" class="btn btn-secondary"><span class="fa fa-plus"></span></button>
+                                                <button id="mv" type="button" class="btn btn-primary" style="margin-left: 1ch">Send Meter Value</button>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body small bg-light text-secondary" id="console"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4 mr-1 ml-1 d-flex">
+                        <div class="col-sm-12 pr-0 pl-0">
+                    <form>
+                    <div class="form-group">
+                        <label for="console">Log: </label>
+                        <textarea readonly class="form-control form-control-sm border-0 bg-light text-secondary" id="console" rows="10" name="console"></textarea>
+                    </div>
+                    </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </main>
-        <script>
-            var c = 0;
-            var _websocket = null;
-            var connector_locked = false;
+                </main>
+            <script>
+                var c = 0;
+                var _websocket = null;
+                var connector_locked = false;
 
-            function formatDate(date) {
-                var day = String(date.getDate());
-                if (day.length < 2) {
-                    day = ('0' + day.slice(-2));
+                function formatDate(date) {
+                    var day = String(date.getDate());
+                    if (day.length < 2) {
+                        day = ('0' + day.slice(-2));
+                    }
+
+                    var monthIndex = String(date.getMonth() + 1);
+                    if (monthIndex.length < 2) {
+                        monthIndex = ('0' + monthIndex.slice(-2));
+                    }
+                    var year = date.getFullYear();
+                    var h = date.getHours();
+                    var m = String(date.getMinutes());
+                    var s = String(date.getSeconds());
+                    if (h.length <2){
+                        h = ('0' + h.slice(-2));
+                    }
+                    if (m.length <2){
+                        m = ('0' + m.slice(-2));
+                    }
+                    if (s.length <2){
+                        s = ('0' + s.slice(-2));
+                    }
+                    return year+'-'+monthIndex+'-'+day+"T"+h+":"+m+":"+s+"Z";
                 }
 
-                var monthIndex = String(date.getMonth() + 1);
-                if (monthIndex.length < 2) {
-                    monthIndex = ('0' + monthIndex.slice(-2));
+                function generateId() {
+                    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    var id = "";
+                    for (var i = 0; i < 36; i++) {
+                        id += possible.charAt(Math.floor(Math.random() * possible.length));
+                    }
+                    return id;
                 }
-                var year = date.getFullYear();
-                var h = date.getHours();
-                var m = String(date.getMinutes());
-                var s = String(date.getSeconds());
-                if (h.length <2){
-                    h = ('0' + h.slice(-2));
+
+                function isEmpty(str) {
+                    return (!str || 0 === str.length);
                 }
-                if (m.length <2){
-                    m = ('0' + m.slice(-2));
+
+                function setKey(key,value) {
+                    localStorage.setItem(key,value)
                 }
-                if (s.length <2){
-                    s = ('0' + s.slice(-2));
+
+                function setSessionKey(key,value) {
+                    sessionStorage.setItem(key,value)
                 }
-                return year+'-'+monthIndex+'-'+day+"T"+h+":"+m+":"+s+"Z";
-            }
 
-            function generateId() {
-                const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                var id = "";
-                for (var i = 0; i < 36; i++) {
-                    id += possible.charAt(Math.floor(Math.random() * possible.length));
+                function keyDefaultValue(key) {
+                    var v=""
+                    switch(key) {
+                        case 'WSURL':
+                            v="ws://localhost:8080/steve/websocket/CentralSystemService/";
+                            break;
+                        case 'CPID':
+                            v='CP01';
+                            break;
+                        case 'TAG':
+                            v='DEADBEEF';
+                            break;
+                        case 'METER_VALUE':
+                            v='0';
+                            break;
+                    }
+                    return v
                 }
-                return id;
-            }
 
-            function isEmpty(str) {
-                return (!str || 0 === str.length);
-            }
-
-            function setKey(key,value) {
-                localStorage.setItem(key,value)
-            }
-
-            function setSessionKey(key,value) {
-                sessionStorage.setItem(key,value)
-            }
-            
-            function keyDefaultValue(key) {
-                var v=""
-                switch(key) {
-                    case 'WSURL':
-                        v="ws://localhost:8080/steve/websocket/CentralSystemService/";
-                        break;
-                    case 'CPID':
-                        v='CP01';
-                        break;
-                    case 'TAG':
-                        v='DEADBEEF';
-                        break;
-                    case 'METER_VALUE':
-                        v='0';
-                        break;
+                function getKey(key) {
+                    var v = localStorage.getItem(key);
+                    if (isEmpty(v)) {
+                        v = keyDefaultValue(key);
+                    }
+                    return v
                 }
-                return v
-            }
 
-            function getKey(key) {
-                var v = localStorage.getItem(key);
-                if (isEmpty(v)) {
-                    v = keyDefaultValue(key);
+                function setLastAction(action) {
+                    setKey("LastAction",action);
                 }
-                return v
-            }
 
-            function setLastAction(action) {
-                setKey("LastAction",action);
-            }
-
-            function getLastAction(){
-                return getKey("LastAction");
-            }
-
-            function setStatus(s,msg) {
-                setSessionKey("STATUS",s);
-                // Reset all indicators
-                $('.indicator').hide();
-                // Set only proper one
-                switch(s){
-                    case 'Disconnected':
-                        $('#badge_disconnected').show();
-                        $('#connect').show();
-                        $('#disconnect').hide();
-                        $('#send').hide();
-                        $('#start').hide();
-                        $('#stop').hide();
-                        $('#heartbeat').hide();
-                        $('#mv').hide();
-                        $('#status0').hide();
-                        $('#status1').hide();
-                        $('#data_transfer').hide();
-                        break;
-                        
-                    case 'Connecting':
-                        $('#badge_connecting').show();
-                        $('#connect').hide();
-                        $('#disconnect').show(); 
-                        break;
-                        
-                    case 'Connected':
-                        $('#badge_connected').show();
-                        $('#connect').hide();
-                        $('#disconnect').show();
-                        $('#send').show();
-                        $('#start').show();
-                        $('#stop').show();
-                        $('#heartbeat').show();
-                        $('#mv').show();
-                        $('#status0').show();
-                        $('#status1').show();
-                        $('#data_transfer').show();
-                        break;
-                        
-                    case 'Available':
-                        $('#badge_available').show();
-                        break;
-                        
-                    case 'InTransaction':
-                        $('#badge_transaction').show();
-                        break;
-                        
-                    case 'Error':
-                        $('#badge_error').show();
-                        if (!isEmpty(msg)) {
-                            logMsg(msg)
-                        }
-                        break;
-                    default:
-                        $('#badge_error').show();
-                        if (!isEmpty(msg)) {
-                            logMsg(msg)
-                        }
-                        else {
-                            logMsg("ERROR: Unknown status")
-                        }
+                function getLastAction(){
+                    return getKey("LastAction");
                 }
-            }
-            
-            function wsConnect() {
-                var wsurl = getKey('WSURL');
-                var CP = getKey('CPID');
 
-                if (_websocket) {
-                    setStatus('Error','Socket already opened. Closing it .Retry later');
-                    _websocket.close(3001);
-                } else {
-                    _websocket = new WebSocket(wsurl + "" + CP, ["ocpp1.6", "ocpp1.5"]);
-                    
-                    //
-                    // OnOpen Callback
-                    //
-                    _websocket.onopen = function(authorizationData) {
-                        setLastAction("BootNotification");
-                        BootNotification();
-                    };
-                    
-                    //
-                    // OnError Callback
-                    //                  
-                    _websocket.onerror = function(evt) {
-                        switch(_websocket.readyState) {
-                            case 1: // OPEN
-                                setStatus('Error','ws normal error: ' + evt.type)
-                                break;
-                            case 3: // CLOSED
-                                setStatus('Error','connection cannot be opened: ' + evt.type)
-                                break;
-                            default:
-                                setStatus('Error','websocket error: ' + evt.type)
-                                break;
-                        }
+                function setStatus(s,msg) {
+                    setSessionKey("STATUS",s);
+                    // Reset all indicators
+                    $('.indicator').hide();
+                    // Set only proper one
+                    switch(s){
+                        case 'Disconnected':
+                            $('#badge_disconnected').show();
+                            $('#connect').show();
+                            $('#disconnect').hide();
+                            $('#send').hide();
+                            $('#start').hide();
+                            $('#stop').hide();
+                            $('#heartbeat').hide();
+                            $('#mv').hide();
+                            $('#status0').hide();
+                            $('#status1').hide();
+                            $('#data_transfer').hide();
+                            break;
 
-                    };
-                    
-                    //
-                    // OnClose Callback
-                    //   
-                    _websocket.onclose = function(evt) {
-                        if (evt.code == 3001) {
-                            setStatus('Disconnected')
-                            logMsg('Connection closed');
-                            _websocket = null;
-                        } else {
-                            setStatus('Error','Connection error: ' + evt.code)
-                            logMsg('Connection error: ' + evt.code);
-                            _websocket = null;
-                        }
-                    };
-                    
-                    //
-                    // OnMessage Callback
-                    // 
-                    _websocket.onmessage = function(msg) {
-                        c++;
-                        console.log("RECEIVE: "+msg.data);
-                        var ddata = (JSON.parse(msg.data));
-                        
-                        // Decrypt Message Type
-                        var msgType=ddata[0];
-                        switch(msgType) {
-                            case 2: // CALL 
-                                break;
-                            case 3: // CALLRESULT 
-                                var la = getLastAction();
-                                var payload = ddata[2];
-                                if (la == "BootNotification") {
-                                    if (payload.status == 'Accepted') {
-                                        logMsg("Connection accepted");
-                                        var hb_interval = payload.interval;
-                                        setKey("Heartbeat",hb_interval);
-                                        startHeartBeat(hb_interval*1000);
-                                        setStatus("Connected");
+                        case 'Connecting':
+                            $('#badge_connecting').show();
+                            $('#connect').hide();
+                            $('#disconnect').show(); 
+                            break;
+
+                        case 'Connected':
+                            $('#badge_connected').show();
+                            $('#connect').hide();
+                            $('#disconnect').show();
+                            $('#send').show();
+                            $('#start').show();
+                            $('#stop').show();
+                            $('#heartbeat').show();
+                            $('#mv').show();
+                            $('#status0').show();
+                            $('#status1').show();
+                            $('#data_transfer').show();
+                            break;
+
+                        case 'Available':
+                            $('#badge_available').show();
+                            break;
+
+                        case 'InTransaction':
+                            $('#badge_transaction').show();
+                            break;
+
+                        case 'Error':
+                            $('#badge_error').show();
+                            if (!isEmpty(msg)) {
+                                logMsg(msg)
+                            }
+                            break;
+                        default:
+                            $('#badge_error').show();
+                            if (!isEmpty(msg)) {
+                                logMsg(msg)
+                            }
+                            else {
+                                logMsg("ERROR: Unknown status")
+                            }
+                    }
+                }
+
+                function wsConnect() {
+                    var wsurl = getKey('WSURL');
+                    var CP = getKey('CPID');
+
+                    if (_websocket) {
+                        setStatus('Error','Socket already opened. Closing it .Retry later');
+                        _websocket.close(3001);
+                    } else {
+                        _websocket = new WebSocket(wsurl + "" + CP, ["ocpp1.6", "ocpp1.5"]);
+
+                        //
+                        // OnOpen Callback
+                        //
+                        _websocket.onopen = function(authorizationData) {
+                            setLastAction("BootNotification");
+                            BootNotification();
+                        };
+
+                        //
+                        // OnError Callback
+                        //                  
+                        _websocket.onerror = function(evt) {
+                            switch(_websocket.readyState) {
+                                case 1: // OPEN
+                                    setStatus('Error','ws normal error: ' + evt.type)
+                                    break;
+                                case 3: // CLOSED
+                                    setStatus('Error','connection cannot be opened: ' + evt.type)
+                                    break;
+                                default:
+                                    setStatus('Error','websocket error: ' + evt.type)
+                                    break;
+                            }
+
+                        };
+
+                        //
+                        // OnClose Callback
+                        //   
+                        _websocket.onclose = function(evt) {
+                            if (evt.code == 3001) {
+                                setStatus('Disconnected')
+                                logMsg('Connection closed');
+                                _websocket = null;
+                            } else {
+                                setStatus('Error','Connection error: ' + evt.code)
+                                logMsg('Connection error: ' + evt.code);
+                                _websocket = null;
+                            }
+                        };
+
+                        //
+                        // OnMessage Callback
+                        // 
+                        _websocket.onmessage = function(msg) {
+                            c++;
+                            console.log("RECEIVE: "+msg.data);
+                            var ddata = (JSON.parse(msg.data));
+
+                            // Decrypt Message Type
+                            var msgType=ddata[0];
+                            switch(msgType) {
+                                case 2: // CALL 
+                                    break;
+                                case 3: // CALLRESULT 
+                                    var la = getLastAction();
+                                    var payload = ddata[2];
+                                    if (la == "BootNotification") {
+                                        if (payload.status == 'Accepted') {
+                                            logMsg("Connection accepted");
+                                            var hb_interval = payload.interval;
+                                            setKey("Heartbeat",hb_interval);
+                                            startHeartBeat(hb_interval*1000);
+                                            setStatus("Connected");
+                                        }
+                                        else {
+                                            logMsg("Connection refused by server");
+                                            wsDisconnect();
+                                        }
                                     }
-                                    else {
-                                        logMsg("Connection refused by server");
-                                        wsDisconnect();
+                                    else if (la == "Authorize") {
+                                        if (payload.idTagInfo.status == 'Invalid') {
+                                            logMsg("Authorization Failed");
+                                        }
+                                        else {
+                                            logMsg("Authorization Success");
+                                            setStatus('Available');
+                                        } 
                                     }
-                                }
-                                else if (la == "Authorize") {
-                                    if (payload.idTagInfo.status == 'Invalid') {
-                                        logMsg("Authorization Failed");
+                                    else if (la == "startTransaction") {
+                                        var array = $.map(payload, function(value, index) {
+                                            return [value];
+                                        });
+                                        var transactionId = (array[0]);
+                                        setKey('TransactionId',transactionId);
+                                        setStatus('InTransaction','TransactionId: '+transactionId)
+                                        logMsg("Starting Transaction "+transactionId);
                                     }
-                                    else {
-                                        logMsg("Authorization Success");
-                                        setStatus('Available');
-                                    } 
-                                }
-                                else if (la == "startTransaction") {
-                                    var array = $.map(payload, function(value, index) {
-                                        return [value];
-                                    });
-                                    var transactionId = (array[0]);
-                                    setKey('TransactionId',transactionId);
-                                    setStatus('InTransaction','TransactionId: '+transactionId)
-                                    logMsg("Starting Transaction "+transactionId);
-                                }
-                                break;
-                            case 4: // CALLERROR
-                                ErrCode=ddata[2];
-                                ErrMsg=ddata[3];
-                                setStatus('Error','ErrorCode: '+ErrCode+' ('+ErrMsg+')');
-                                break;
-                        }
-/*
+                                    break;
+                                case 4: // CALLERROR
+                                    ErrCode=ddata[2];
+                                    ErrMsg=ddata[3];
+                                    setStatus('Error','ErrorCode: '+ErrCode+' ('+ErrMsg+')');
+                                    break;
+                            }
+                            /*
                         } else if ((JSON.parse(msg.data))[0] === 2) {
                             logMsg((JSON.parse(msg.data))[2]);
                             var _id = (JSON.parse(msg.data))[1];
@@ -425,215 +434,221 @@
                             }
                         }
                         */
-                    };
+                        };
 
 
 
-                }
-            }
-            
-            function wsDisconnect() {
-                if (_websocket) {
-                    _websocket.close(3001);
-                }
-                setStatus('Disconnected');
-            }
-            
-            function wsSendData(data) {
-                console.log("SEND: "+data);
-                _websocket.send(data);
-            }
-
-            function logMsg(err) {
-                console.log(err);
-                $('#console').append('<br/><span>' + err + '</span>');
-            }
-
-            function Authorize(){
-                setLastAction("Authorize");
-                var id=generateId();
-                var Auth = JSON.stringify([2,id,"Authorize", {
-                    "idTag": $("#TAG").val()
-                }]);
-                wsSendData(Auth);
-            }
-
-            function startTransaction(){
-                setLastAction("startTransaction");
-                setStatus("InTransaction");
-                connector_locked = true;
-                var meter_start_value = $("#metervalue").val();
-                logMsg("Connector status changed to: " + connector_locked);
-                var id=generateId();
-                var strtT = JSON.stringify([2,id,"StartTransaction", {
-                    "connectorId": 1,
-                    "idTag": $("#TAG").val(),
-                    "timestamp": formatDate(new Date()),
-                    "meterStart": meter_start_value,
-                    "reservationId": 0
-                }]);
-                wsSendData(strtT);
-            }
-
-            function stopTransaction(transaction_id = false){
-                setLastAction("stopTransaction");
-                var ssid="";
-                transaction_id == false ? ssid = getKey('TransactionId') : ssid = transaction_id;
-                var meter_stop_value = $("#metervalue").val();
-                setStatus("Available");
-                connector_locked = false;
-                logMsg("Connector status changed to: " + connector_locked);
-                var id=generateId();
-                var stpT = JSON.stringify([2, id, "StopTransaction",{
-                    "transactionId": ssid,
-                    "idTag": $("#TAG").val(),
-                    "timestamp": formatDate(new Date()),
-                    "meterStop": meter_stop_value
-                }]);
-                wsSendData(stpT);
-            }
-
-            function BootNotification(){
-                var id=generateId();
-                var BN = JSON.stringify([2, id, "BootNotification", {
-                    "chargePointVendor": "Elmo",
-                    "chargePointModel": "Elmo-Virtual1",
-                    "chargePointSerialNumber": "elm.001.13.1",
-                    "chargeBoxSerialNumber": "elm.001.13.1.01",
-                    "firmwareVersion": "0.9.87",
-                    "iccid": "",
-                    "imsi": "",
-                    "meterType": "ELM NQC-ACDC",
-                    "meterSerialNumber": "elm.001.13.1.01"
-                }]);
-                setStatus('Connecting');
-                logMsg('BootNotification');
-                wsSendData(BN);
-            }
-
-            function startHeartBeat(interval){
-                logMsg("Setting heartbeat interval to "+interval);
-                setInterval(send_heartbeat,interval);
-            }
-
-            function send_heartbeat() {
-                setLastAction("Heartbeat");
-                var id=generateId();
-                var HB = JSON.stringify([2,id,"Heartbeat", {}]);
-                logMsg('Heartbeat');
-                wsSendData(HB);
-            }
-
-
-            $( document ).ready(function() {
-                logMsg("OCPP Simulator ready");
-
-                // Init the setting form
-                $('#WSURL').val(getKey("WSURL"))
-                $('#CPID').val(getKey("CPID"))
-                $('#TAG').val(getKey("TAG"))
-                $("#metervalue").val(getKey("METER_VALUE"));
-                setStatus('Disconnected');
-
-                // Define settings call back
-                $('#cpparams').submit(function(e) {
-                    const formData = new FormData(e.target);
-                    for (var pair of formData.entries()) {
-                        setKey(pair[0],pair[1])
                     }
-                });
+                }
 
-                $('#connect').click(function () {
-                    $('.indicator').hide();
-                    wsConnect();
-                });
-
-                $('#disconnect').click(function () {
-                    wsDisconnect();
-                });
-                $('#send').click(function () {
-                    Authorize();
-                });
-
-                $('#start').click(function () {
-                    startTransaction();
-                });
-
-                $('#stop').click(function () {
-                    stopTransaction();
-                });
-
-                $('#mv').click(function () {
-                    setLastAction("MeterValues");
-                    var meter = $("#metervalue").val();
-                    setKey("METER_VALUE",meter);
-                    var id=generateId();
-                    var ssid = getKey('TransactionId')
-                    var MV = JSON.stringify([2, id, "MeterValues", {"connectorId": 1, "transactionId": ssid, "meterValue": [{"timestamp": formatDate(new Date()), "sampledValue": [{"value": meter}]}]}]);
-                    wsSendData(MV);
-                });
-                
-                $("#mvplus").click(function(){
-                    var meter = $("#metervalue").val();
-                    meter = parseInt(meter) + 10;
-	               $("#metervalue").val(meter);        
-                });
-
-                
-                $('#heartbeat').click(function () {
-                    send_heartbeat();
-                });
-
-                $('#status0').click(function () {
-                    setLastAction("StatusNotification");
-                    var id=generateId();
-                    var st=$("#CP0_STATUS").val();
-                    var SN = JSON.stringify([2, id, "StatusNotification", {
-                        "connectorId": 0,
-                        "status": st,
-                        "errorCode": "NoError",
-                        "info": "",
-                        "timestamp": formatDate(new Date()),
-                        "vendorId": "",
-                        "vendorErrorCode": ""
-                    }]);
-                    wsSendData(SN);
-                });
-                $('#status1').click(function () {
-                    setLastAction("StatusNotification");
-                    var id=generateId();
-                    var st=$("#CP1_STATUS").val();
-                    var SN = JSON.stringify([2, id, "StatusNotification", {
-                        "connectorId": 1,
-                        "status": st,
-                        "errorCode": "NoError",
-                        "info": "",
-                        "timestamp": formatDate(new Date()),
-                        "vendorId": "",
-                        "vendorErrorCode": ""
-                    }]);
-                    wsSendData(SN);
-                });
-
-                $('#data_transfer').click(function () {
-                    setLastAction("DataTransfer");
-                    var id=generateId();
-                    var DT = JSON.stringify([2,id, "DataTransfer", {
-                        "vendorId": "rus.avt.cp",
-                        "messageId": "GetChargeInstruction",
-                        "data": ""
-                    }]);
-                    wsSendData(DT);
-                });
-
-                $('#connect').on('change', function () {
+                function wsDisconnect() {
                     if (_websocket) {
                         _websocket.close(3001);
                     }
+                    setStatus('Disconnected');
+                }
+
+                function wsSendData(data) {
+                    console.log("SEND: "+data);
+                    _websocket.send(data);
+                }
+
+                function logMsg(err) {
+                    console.log(err);
+                    //$('#console').append('<br/><span>' + err + '</span>');
+                    var html_console=$('#console');
+                    html_console.append("&#10;"+err);
+                    html_console.scrollTop(html_console.get(0).scrollHeight);
+                }
+
+                function Authorize(){
+                    setLastAction("Authorize");
+                    var id=generateId();
+                    var Auth = JSON.stringify([2,id,"Authorize", {
+                        "idTag": $("#TAG").val()
+                    }]);
+                    wsSendData(Auth);
+                }
+
+                function startTransaction(){
+                    setLastAction("startTransaction");
+                    setStatus("InTransaction");
+                    connector_locked = true;
+                    var meter_start_value = $("#metervalue").val();
+                    logMsg("Connector status changed to: " + connector_locked);
+                    var id=generateId();
+                    var strtT = JSON.stringify([2,id,"StartTransaction", {
+                        "connectorId": 1,
+                        "idTag": $("#TAG").val(),
+                        "timestamp": formatDate(new Date()),
+                        "meterStart": meter_start_value,
+                        "reservationId": 0
+                    }]);
+                    wsSendData(strtT);
+                }
+
+                function stopTransaction(transaction_id = false){
+                    setLastAction("stopTransaction");
+                    var ssid="";
+                    transaction_id == false ? ssid = getKey('TransactionId') : ssid = transaction_id;
+                    var meter_stop_value = $("#metervalue").val();
+                    setStatus("Available");
+                    connector_locked = false;
+                    logMsg("Connector status changed to: " + connector_locked);
+                    var id=generateId();
+                    var stpT = JSON.stringify([2, id, "StopTransaction",{
+                        "transactionId": ssid,
+                        "idTag": $("#TAG").val(),
+                        "timestamp": formatDate(new Date()),
+                        "meterStop": meter_stop_value
+                    }]);
+                    wsSendData(stpT);
+                }
+
+                function BootNotification(){
+                    var id=generateId();
+                    var BN = JSON.stringify([2, id, "BootNotification", {
+                        "chargePointVendor": "Elmo",
+                        "chargePointModel": "Elmo-Virtual1",
+                        "chargePointSerialNumber": "elm.001.13.1",
+                        "chargeBoxSerialNumber": "elm.001.13.1.01",
+                        "firmwareVersion": "0.9.87",
+                        "iccid": "",
+                        "imsi": "",
+                        "meterType": "ELM NQC-ACDC",
+                        "meterSerialNumber": "elm.001.13.1.01"
+                    }]);
+                    setStatus('Connecting');
+                    logMsg('BootNotification');
+                    wsSendData(BN);
+                }
+
+                function startHeartBeat(interval){
+                    logMsg("Setting heartbeat interval to "+interval);
+                    setInterval(send_heartbeat,interval);
+                }
+
+                function send_heartbeat() {
+                    setLastAction("Heartbeat");
+                    var id=generateId();
+                    var HB = JSON.stringify([2,id,"Heartbeat", {}]);
+                    logMsg('Heartbeat');
+                    wsSendData(HB);
+                }
+
+
+                $( document ).ready(function() {
+                    logMsg("OCPP Simulator ready");
+
+                    // Init the setting form
+                    $('#WSURL').val(getKey("WSURL"))
+                    $('#CPID').val(getKey("CPID"))
+                    $('#TAG').val(getKey("TAG"))
+                    $("#metervalue").val(getKey("METER_VALUE"));
+                    setStatus('Disconnected');
+
+                    // Define settings call back
+                    $('#cpparams').submit(function(e) {
+                        const formData = new FormData(e.target);
+                        for (var pair of formData.entries()) {
+                            setKey(pair[0],pair[1])
+                        }
+                    });
+
+                    $('#connect').click(function () {
+                        $('.indicator').hide();
+                        wsConnect();
+                    });
+
+                    $('#disconnect').click(function () {
+                        wsDisconnect();
+                    });
+                    $('#send').click(function () {
+                        Authorize();
+                    });
+
+                    $('#start').click(function () {
+                        startTransaction();
+                    });
+
+                    $('#stop').click(function () {
+                        stopTransaction();
+                    });
+
+                    $('#mv').click(function () {
+                        setLastAction("MeterValues");
+                        var meter = $("#metervalue").val();
+                        setKey("METER_VALUE",meter);
+                        var id=generateId();
+                        var ssid = getKey('TransactionId')
+                        var MV = JSON.stringify([2, id, "MeterValues", {"connectorId": 1, "transactionId": ssid, "meterValue": [{"timestamp": formatDate(new Date()), "sampledValue": [{"value": meter}]}]}]);
+                        logMsg("Send Meter Values: "+meter+" (connector1)")
+                        wsSendData(MV);
+                    });
+
+                    $("#mvplus").click(function(){
+                        var meter = $("#metervalue").val();
+                        meter = parseInt(meter) + 10;
+                        $("#metervalue").val(meter);        
+                    });
+
+
+                    $('#heartbeat').click(function () {
+                        send_heartbeat();
+                    });
+
+                    $('#status0').click(function () {
+                        setLastAction("StatusNotification");
+                        var id=generateId();
+                        var st=$("#CP0_STATUS").val();
+                        var SN = JSON.stringify([2, id, "StatusNotification", {
+                            "connectorId": 0,
+                            "status": st,
+                            "errorCode": "NoError",
+                            "info": "",
+                            "timestamp": formatDate(new Date()),
+                            "vendorId": "",
+                            "vendorErrorCode": ""
+                        }]);
+                        logMsg("Status Notification: connector0 = "+st);
+                        wsSendData(SN);
+                    });
+                    $('#status1').click(function () {
+                        setLastAction("StatusNotification");
+                        var id=generateId();
+                        var st=$("#CP1_STATUS").val();
+                        var SN = JSON.stringify([2, id, "StatusNotification", {
+                            "connectorId": 1,
+                            "status": st,
+                            "errorCode": "NoError",
+                            "info": "",
+                            "timestamp": formatDate(new Date()),
+                            "vendorId": "",
+                            "vendorErrorCode": ""
+                        }]);
+                        logMsg("Status Notification: connector1 = "+st);
+                        wsSendData(SN);
+                    });
+
+                    $('#data_transfer').click(function () {
+                        setLastAction("DataTransfer");
+                        var id=generateId();
+                        var DT = JSON.stringify([2,id, "DataTransfer", {
+                            "vendorId": "rus.avt.cp",
+                            "messageId": "GetChargeInstruction",
+                            "data": ""
+                        }]);
+                        wsSendData(DT);
+                    });
+
+                    $('#connect').on('change', function () {
+                        if (_websocket) {
+                            _websocket.close(3001);
+                        }
+                    });
                 });
-            });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </body>
-</html>
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+            </body>
+        </html>
