@@ -387,7 +387,8 @@
             }
 
             //
-            // Send data to the server
+            // Send data to the server (will be also logged in console)
+            // @data the data to send 
             //
             function wsSendData(data) {
                 console.log("SEND: "+data);
@@ -481,7 +482,7 @@
                     var transactionId = (array[0]);
                     setKey('TransactionId',transactionId);
                     setStatus('InTransaction','TransactionId: '+transactionId)
-                    logMsg("Accepted. Transaction id is "+transactionId);
+                    logMsg("Transaction id is "+transactionId);
                 }
             }
             
@@ -542,6 +543,9 @@
                 wsSendData(stpT);
             }
 
+            //
+            // Send a BootNotification call to the OCPP Server
+            //
             function BootNotification(){
                 var id=generateId();
                 var BN = JSON.stringify([2, id, "BootNotification", {
@@ -561,17 +565,23 @@
             }
 
             //
-            // 
-            function startHeartBeat(interval){
-                logMsg("Setting heartbeat interval to "+interval+"s");
+            // Setup heartbeat sending at the appropriate period
+            // (clearing any previous setup)
+            // @param period The heartbeat period in seconds
+            //
+            function startHeartBeat(period){
+                logMsg("Setting heartbeat period to "+period+"s");
                 if (_hb) {
                     console.log("Clearing Heartbeat")
                     clearInterval(_hb);
                 }
-                _hb=setInterval(send_heartbeat,interval*1000);
+                _hb=setInterval(cmdHeartbeat,period*1000);
             }
 
-            function send_heartbeat() {
+            //
+            // Send a heartbeat to the OCPP Server
+            //
+            function cmdHeartbeat() {
                 setLastAction("Heartbeat");
                 var id=generateId();
                 var HB = JSON.stringify([2,id,"Heartbeat", {}]);
@@ -580,6 +590,10 @@
             }
 
 
+            //
+            // Entry point of the simulator
+            // (attach callbacks to each button and wait for user action)
+            //
             $( document ).ready(function() {
                 logMsg("OCPP Simulator ready");
 
