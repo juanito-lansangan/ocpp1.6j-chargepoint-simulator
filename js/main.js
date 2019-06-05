@@ -184,11 +184,17 @@ $( document ).ready(function() {
         _cp.sendHeartbeat();
     });
 
+    $('#CP0_STATUS').change(function () {
+        _cp.setConnectorStatus(0,$("#CP0_STATUS").val(),false);
+    });
+    $('#CP1_STATUS').change(function () {
+        _cp.setConnectorStatus(1,$("#CP1_STATUS").val(),false);
+    });
     $('#status0').click(function () {
-        _cp.sendStatusNotification(0,$("#CP0_STATUS").val())
+        _cp.setConnectorStatus(0,$("#CP0_STATUS").val(),true);
     });
     $('#status1').click(function () {
-        _cp.sendStatusNotification(1,$("#CP1_STATUS").val())
+        _cp.setConnectorStatus(1,$("#CP1_STATUS").val(),true);
     });
 
     $('#data_transfer').click(function () {

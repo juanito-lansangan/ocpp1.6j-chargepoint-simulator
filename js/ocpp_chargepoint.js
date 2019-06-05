@@ -125,32 +125,43 @@ export default class ChargePoint {
     // Handle a command coming from the OCPP server
     //
     handleCallRequest(id,request,payload) {
+        var respOk = JSON.stringify([3,id,{"status": "Accepted"}]);
         switch (request) {
             case "Reset":
                 //Reset type can be SOFT, HARD
                 var rstType=payload.type;
                 this.logMsg("Reset Request: type="+rstType);
-                var resetS = JSON.stringify([3,id,{"status": "Accepted"}]);
-                this.wsSendData(resetS);
+                this.wsSendData(respOk);
                 this.wsDisconnect();
                 break;
 
             case "RemoteStartTransaction":
                 console.log("RemoteStartTransaction");
                 //Need to get idTag, connectorId (map - ddata[3])
-                var remStrt = JSON.stringify([3,id,{"status": "Accepted"}]);
                 var tagId = payload.idTag;
-                this.wsSendData(remStrt);
+                this.logMsg("Reception of a RemoteStartTransaction request for tag "+tagId);
+                this.wsSendData(respOk);
                 this.startTransaction(tagId);
                 break;
 
             case "RemoteStopTransaction":
-                var remStp = JSON.stringify([3,id,{"status": "Accepted"}]);
                 var stop_id = payload.transactionId;
-                this.wsSendData(remStp);
+                this.logMsg("Reception of a RemoteStopTransaction request for transaction "+stop_id);
+                this.wsSendData(respOk);
                 this.stopTransactionWithId(stop_id);
                 break;
 
+            case "TriggerMessage":
+                var requestedMessage = payload.requestedMessage;
+                var connectorId=0;
+                if(payload["connectorId"]) {
+                    connectorId = payload["connectorId"];
+                }
+                this.logMsg("Reception of a TriggerMessage request ("+requestedMessage+")");
+                this.wsSendData(respOk);
+                this.triggerMessage(requestedMessage,connectorId);
+                break;
+                
             case "UnlockConnector": /////////ERROR!!!!!!!!
                 //connectorId
                 var UC = JSON.stringify([3,id, {"status": "Accepted"}]);
@@ -280,9 +291,38 @@ export default class ChargePoint {
     }
     
     //
+    // Implement the TriggerMessage request
+    // @param requestedMessage the message that shall be triggered
+    // @param c connectorId concerned by the message (if any)
+    //
+    triggerMessage(requestedMessage,c=0) {
+        switch(requestedMessage) {
+            case 'BootNotification':
+                this.sendBootNotification();
+                break;
+            case 'Heartbeat':
+                this.sendHeartbeat();
+                break;
+            case 'MeterValues':
+                this.sendMeterValue(c);
+                break;
+            case 'StatusNotification':
+                this.sendStatusNotification(c);
+                break;
+            case 'DiagnosticStatusNotification':
+                break;
+            case 'FirmwareStatusNotification':
+                break;
+            default:
+                this.logMsg("Requested Message not supported: "+requestedMessage);
+                break;
+        }
+    }
+    
+    //
     // Send a BootNotification call to the OCPP Server
     //
-    bootNotification(){
+    sendBootNotification(){
         this.logMsg('Sending BootNotification');
         this.setLastAction("BootNotification");
         var id=generateId();
@@ -374,7 +414,7 @@ export default class ChargePoint {
             //
             this._websocket.onopen = function(evt) {
                 self.setStatus(ocpp.CP_CONNECTING);
-                self.bootNotification();
+                self.sendBootNotification();
             }
 
             //
@@ -473,37 +513,47 @@ export default class ChargePoint {
     //
     // update the server with the internal meter value
     //
-    sendMeterValue() {
+    sendMeterValue(c=0) {
         var mvreq={};
         this.setLastAction("MeterValues");
         var meter=getSessionKey(ocpp.KEY_METER_VALUE);
         var id=generateId();
-        var ssid = getSessionKey('TransactionId')
-        mvreq = JSON.stringify([2, id, "MeterValues", {"connectorId": 1, "transactionId": ssid, "meterValue": [{"timestamp": formatDate(new Date()), "sampledValue": [{"value": meter}]}]}]);
-        this.logMsg("Send Meter Values: "+meter+" (connector1)")
+        var ssid = getSessionKey('TransactionId');
+        mvreq = JSON.stringify([2, id, "MeterValues", {"connectorId": c, "transactionId": ssid, "meterValue": [{"timestamp": formatDate(new Date()), "sampledValue": [{"value": meter}]}]}]);
+        this.logMsg("Send Meter Values: "+meter+" (connector " +c+")");
         this.wsSendData(mvreq);
     }
     
     //
+    // Get the status of given connector
+    // @param c connectorId
+    // @return connector status as string
+    //
+    connectorStatus(c) {
+        var key = ocpp.KEY_CONN_STATUS + c;
+        return getSessionKey(key);
+    }
+    
+    //
     // Update status of given connector
-    // @param connectorId MUST be 1 for now
+    // @param c connectorId
     // @param new status for connector
     // @param updateServer if true, also send a StatusNotification to server
     //
-    setConnectorStatus(connectorId,newStatus,updateServer=false)
-    {
-        setSessionKey(ocpp.KEY_CONN1_STATUS,newStatus);
+    setConnectorStatus(c,newStatus,updateServer=false) {
+        var key = ocpp.KEY_CONN_STATUS + c;
+        setSessionKey(key,newStatus);
         if(updateServer) {
-            this.sendStatusNotification(connectorId,newStatus);
+            this.sendStatusNotification(c,newStatus);
         }
     }
     
     //
     // Send a StatusNotification to the server with the new status of the specified connector
     // @param c The connector id (0 for CP, 1 for connector 1, etc...)
-    // @param st The connector status
     //
-    sendStatusNotification(c,st) {
+    sendStatusNotification(c) {
+        var st=this.connectorStatus(c);
         this.setLastAction("StatusNotification");
         var id=generateId();
         var sn_req = JSON.stringify([2, id, "StatusNotification", {
