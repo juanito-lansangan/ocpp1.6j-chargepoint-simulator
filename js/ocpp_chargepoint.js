@@ -68,6 +68,28 @@ function getSessionKey(key,default_value="") {
 }
 
 //
+// Store a key value in local storage
+// @param key The key name
+// @param value The key value
+//
+function setKey(key,value) {
+    localStorage.setItem(key,value)
+}
+
+//
+// Get a key value from session storage
+// @param key The key name
+// @return The key value
+//
+function getKey(key,default_value="") {
+    var v = localStorage.getItem(key);
+    if (!v) {
+        v=default_value;
+    }
+    return v
+}
+
+//
 //
 // OCPPChargePoint class
 //
@@ -79,24 +101,36 @@ export default class ChargePoint {
     // @param a callback function that will receive debug logging information
     //
     constructor() {
-        this._websocket      = null;
-        this._heartbeat      = null;
-        this._statusChangeCb = null;
-        this._loggingCb      = null;
+        this._websocket            = null;
+        this._heartbeat            = null;
+        this._statusChangeCb       = null;
+        this._availabilityChangeCb = null;
+        this._loggingCb            = null;
     } 
 
     //
-    // module init method
+    // Set the StatusChange callback, this will be triggered when the internal status
+    // of the charge point change
+    // @param A callback function which takes two string arguments ("new status","optionnal detail")
     //
     setStatusChangeCallback(cb) {
         this._statusChangeCb = cb;
     }
     
     //
-    // module init method
+    // Set the logging callback, this will be triggered when the charge point want to output/log some information
+    // @param A callback function which takes a string argument ("message to log")
     //
     setLoggingCallback(cb) {
         this._loggingCb = cb;
+    }
+    
+    //
+    // Set the logging callback, this will be triggered when the OCPP server triggers a SetAvailability message
+    // @param A callback function which takes two arguments (int + string): (connectorId,"new availability")
+    //
+    setAvailabilityChangeCallback(cb) {
+        this._availabilityChangeCb = cb;
     }
     
     //
@@ -126,6 +160,7 @@ export default class ChargePoint {
     //
     handleCallRequest(id,request,payload) {
         var respOk = JSON.stringify([3,id,{"status": "Accepted"}]);
+        var connectorId=0;
         switch (request) {
             case "Reset":
                 //Reset type can be SOFT, HARD
@@ -153,8 +188,8 @@ export default class ChargePoint {
 
             case "TriggerMessage":
                 var requestedMessage = payload.requestedMessage;
-                var connectorId=0;
-                if(payload["connectorId"]) {
+                // connectorId is optionnal thus must check if it is provided
+                if(payload["connectorId"]) { 
                     connectorId = payload["connectorId"];
                 }
                 this.logMsg("Reception of a TriggerMessage request ("+requestedMessage+")");
@@ -162,10 +197,16 @@ export default class ChargePoint {
                 this.triggerMessage(requestedMessage,connectorId);
                 break;
                 
-            case "UnlockConnector": /////////ERROR!!!!!!!!
-                //connectorId
-                var UC = JSON.stringify([3,id, {"status": "Accepted"}]);
-                this.wsSendData(UC);
+            case "ChangeAvailability":
+                var avail=payload.type;
+                connectorId=payload.connectorId;
+                this.logMsg("Reception of a ChangeAvailability request (connector "+connectorId+" "+avail+")");
+                this.wsSendData(respOk);
+                this.setConnectorAvailability(Number(connectorId),avail)
+                break;
+                
+            case "UnlockConnector":
+                this.wsSendData(respOk);
                 // connector_locked = false;
                 // $('.indicator').hide();
                 //$('#yellow').show();
@@ -173,7 +214,7 @@ export default class ChargePoint {
                 break;
 
             default:
-                var error = JSON.stringify([4,id]);
+                var error = JSON.stringify([4,id,"NotImplemented"]);
                 this.wsSendData(error);
                 break;
         }
@@ -568,5 +609,39 @@ export default class ChargePoint {
         this.logMsg("Sending StatusNotification for connector "+c+": "+st);
         this.wsSendData(sn_req);
     }
+    
+    //
+    // Get availability for given connector
+    // (availability is persistent thus stored in local storage instead of session storage)
+    // @param c connector id
+    // @return connector availability
+    //
+    availability(c=0) {
+        var key = ocpp.KEY_CONN_AVAILABILITY + c;
+        return getKey(key,ocpp.AVAILABITY_OPERATIVE);
+    }
 
+    //
+    // Update the availability of given connector
+    // (availability is set by remote server thus no "updateServer" flag as for connector status)
+    // @param c connectorId
+    // @param new availability for connector
+    //
+    setConnectorAvailability(c,newAvailability) {
+        var key = ocpp.KEY_CONN_AVAILABILITY + c;
+        setKey(key,newAvailability);
+        if(newAvailability==ocpp.AVAILABITY_INOPERATIVE) {
+            this.setConnectorStatus(c,ocpp.CONN_UNAVAILABLE,true);
+        }
+        else if(newAvailability==ocpp.AVAILABITY_INOPERATIVE) {
+            this.setConnectorStatus(c,ocpp.CONN_AVAILABLE,true);
+        }
+        if(this._availabilityChangeCb) {
+            this._availabilityChangeCb(c,newAvailability);
+        }
+        if (Number(c)==0) {
+            this.setConnectorAvailability(1,newAvailability);
+            this.setConnectorAvailability(2,newAvailability);
+        }
+    }
 }

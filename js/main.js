@@ -121,6 +121,13 @@ function statusChangeCb(s,msg) {
     }
 }
 
+function availabilityChangeCb(c,s) {    
+    var dom_id="#AVAILABILITY_CON"+c;
+    $(dom_id).val(s);
+    var dom_id="#STATUS_CON"+c;
+    $(dom_id).val(_cp.connectorStatus(c));
+}
+
 //
 // Entry point of the simulator
 // (attach callbacks to each button and wait for user action)
@@ -129,6 +136,7 @@ $( document ).ready(function() {
 
     _cp.setLoggingCallback(logMsg);
     _cp.setStatusChangeCallback(statusChangeCb);
+    _cp.setAvailabilityChangeCallback(availabilityChangeCb);
     _cp.setStatus(ocpp.CP_DISCONNECTED);
 
     // Init the setting form
@@ -136,6 +144,8 @@ $( document ).ready(function() {
     $('#CPID').val(getKey(CPID))
     $('#TAG').val(getKey(TAGID))
     $("#metervalue").val(_cp.meterValue());
+    availabilityChangeCb(0,_cp.availability(0));
+    availabilityChangeCb(1,_cp.availability(1));
 
     // Define settings call back
     $('#cpparams').submit(function(e) {
@@ -185,16 +195,16 @@ $( document ).ready(function() {
     });
 
     $('#CP0_STATUS').change(function () {
-        _cp.setConnectorStatus(0,$("#CP0_STATUS").val(),false);
+        _cp.setConnectorStatus(0,$("#STATUS_CON0").val(),false);
     });
     $('#CP1_STATUS').change(function () {
-        _cp.setConnectorStatus(1,$("#CP1_STATUS").val(),false);
+        _cp.setConnectorStatus(1,$("#STATUS_CON1").val(),false);
     });
     $('#status0').click(function () {
-        _cp.setConnectorStatus(0,$("#CP0_STATUS").val(),true);
+        _cp.setConnectorStatus(0,$("#STATUS_CON0").val(),true);
     });
     $('#status1').click(function () {
-        _cp.setConnectorStatus(1,$("#CP1_STATUS").val(),true);
+        _cp.setConnectorStatus(1,$("#STATUS_CON1").val(),true);
     });
 
     $('#data_transfer').click(function () {

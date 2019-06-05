@@ -26,6 +26,12 @@
                     <a class="nav-link active" href="#tabcpsim" data-toggle="tab">ChargePoint</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="#tabcon1" data-toggle="tab">Connector 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#tabcon2" data-toggle="tab">Connector 2</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="#tabcpparams" data-toggle="tab">Settings</a>
                 </li>
             </ul>
@@ -54,7 +60,37 @@
                         <button type="submit" class="btn btn-primary">Save</button>
                     </form>    
                 </div>
-
+                <div class="tab-pane mt-4" id="tabcon1">
+                    <form id="con1">
+                        <div class="form-group">
+                            <label for="AVAILABILITY_CON1">Connector Availability:</label>
+                            <select id="AVAILABILITY_CON1" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                <option selected value="Operative">Operative</option>
+                                <option disabled value="Inoperative">Inoperative</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="STATUS_CON1">Connector Status:</label>
+                            <div class="d-flex">
+                                <select id="STATUS_CON1" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                    <option value="Available">Available</option>
+                                    <option value="Preparing">Preparing</option>
+                                    <option value="Charging">Charging</option>
+                                    <option value="SuspendedEV">Suspended EV</option>
+                                    <option value="SuspendedEVSE">Suspended EVSE</option>
+                                    <option value="Finishing">Finishing</option>
+                                    <option value="Reserved">Reserved</option>
+                                    <option value="Unavailable">Unavailable</option>
+                                    <option value="Faulted">Faulted</option>
+                                </select>
+                                <button id="status1" type="button" class="btn btn-primary">Status Notification</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane mt-4" id="tabcon2">
+                    <p>I am not yet available...</p>
+                </div>
                 <div class="tab-pane active" id="tabcpsim">
                     <div class="row mt-4">
                         <div class="col-sm-4">
@@ -75,33 +111,23 @@
                                         <span id="badge_connecting" class="indicator badge badge-secondary">Connecting</span>
                                         <span id="badge_disconnected" class="indicator badge badge-light">Disconnected</span>
                                         <span id="badge_error" class="indicator badge badge-danger">Error</span>
-                                        <span id="badge_transaction" class="indicator badge badge-primary">In Transaction</span></p>     
+                                        <span id="badge_transaction" class="indicator badge badge-primary">In Transaction</span></p>  
                                     <div class="form-group">
-                                        <label for="CP0_STATUS">CP Status (Connector 0):</label>
+                                        <label for="AVAILABILITY_CON0">Charge Point Availability:</label>
+                                        <select id="AVAILABILITY_CON0" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                            <option selected value="Operative">Operative</option>
+                                            <option disabled value="Inoperative">Inoperative</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="STATUS_CON0">Charge Point Status:</label>
                                         <div class="d-flex">
-                                            <select id="CP0_STATUS" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                            <select id="STATUS_CON0" class="form-control" style="max-width: 16ch; margin-right:1ch;">
                                                 <option value="Available">Available</option>
                                                 <option value="Unavailable">Unavailable</option>
                                                 <option value="Faulted">Faulted</option>
                                             </select>
                                             <button id="status0" type="button" class="btn btn-primary">Status Notification</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="CP1_STATUS">Connector 1 Status:</label>
-                                        <div class="d-flex inner">
-                                            <select id="CP1_STATUS" class="form-control" style="max-width: 16ch; margin-right:1ch;">
-                                                <option value="Available">Available</option>
-                                                <option value="Preparing">Preparing</option>
-                                                <option value="Charging">Charging</option>
-                                                <option value="SuspendedEV">Suspended EV</option>
-                                                <option value="SuspendedEVSE">Suspended EVSE</option>
-                                                <option value="Finishing">Finishing</option>
-                                                <option value="Reserved">Reserved</option>
-                                                <option value="Unavailable">Unavailable</option>
-                                                <option value="Faulted">Faulted</option>
-                                            </select>
-                                            <button id="status1" type="button" class="btn btn-primary">Status Notification</button>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -119,16 +145,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-4 mr-1 ml-1 d-flex">
-                        <div class="col-sm-12 pr-0 pl-0">
-                            <form>
-                                <div class="form-group">
-                                    <label for="console">Log: </label>
-                                    <textarea readonly class="form-control form-control-sm border-0 bg-light text-secondary" id="console" rows="10" name="console"></textarea>
-                                </div>
-                            </form>
+                </div>
+            </div>
+            <div class="row mt-4 mr-1 ml-1 d-flex">
+                <div class="col-sm-12 pr-0 pl-0">
+                    <form>
+                        <div class="form-group">
+                            <label for="console">Log: </label>
+                            <textarea readonly class="form-control form-control-sm border-0 bg-light text-secondary" id="console" rows="10" name="console"></textarea>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </main>
