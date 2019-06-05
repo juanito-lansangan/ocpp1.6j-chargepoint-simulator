@@ -1,8 +1,3 @@
-/*eslint prefer-const: "error"*/
-/* exported ocpp */
-/*eslint no-console: ["error", { allow: ["log","warn","error"] }] */
-/*eslint no-unused-vars: ["error", {"args": "none"}]*/
-/*global $ */
 "use strict";
 import * as ocpp from './ocpp_constants.js'
 
@@ -44,6 +39,10 @@ function generateId() {
         id += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return id;
+}
+
+function isEmpty(str) {
+    return (!str || 0 === str.length);
 }
 
 //
@@ -142,15 +141,14 @@ export default class ChargePoint {
                 var remStrt = JSON.stringify([3,id,{"status": "Accepted"}]);
                 var tagId = payload.idTag;
                 this.wsSendData(remStrt);
-                this.startTransaction(tagId,$("#metervalue").val());
+                this.startTransaction(tagId);
                 break;
 
             case "RemoteStopTransaction":
-                //TransactionID
                 var remStp = JSON.stringify([3,id,{"status": "Accepted"}]);
                 var stop_id = payload.transactionId;
                 this.wsSendData(remStp);
-                this.stopTransactionWithId(stop_id,$("#TAG").val(),$("#metervalue").val());
+                this.stopTransactionWithId(stop_id);
                 break;
 
             case "UnlockConnector": /////////ERROR!!!!!!!!
@@ -198,10 +196,7 @@ export default class ChargePoint {
             } 
         }
         else if (la == "startTransaction") {
-            var array = $.map(payload, function(value,index) {
-                return [value];
-            });
-            var transactionId = (array[0]);
+            var transactionId = payload.transactionId;
             setSessionKey('TransactionId',transactionId);
             this.setStatus(ocpp.CP_INTRANSACTION,'TransactionId: '+transactionId)
             this.logMsg("Transaction id is "+transactionId);
@@ -234,20 +229,20 @@ export default class ChargePoint {
     //
     // Send a StartTransaction call to the OCPP Server
     // @param tagId the id of the RFID tag currently authorized on the CP
-    // @param meterValue the current value of the CP meter
     //
-    startTransaction(tagId,meterValue=0,connectorId=1,reservationId=0){
+    startTransaction(tagId,connectorId=1,reservationId=0){
         this.setLastAction("startTransaction");
         this.setStatus(ocpp.CP_INTRANSACTION);
-        this.logMsg("Starting Transaction for tag "+tagId+" (meter value="+meterValue+")");
+        var mv = this.meterValue();
         var id=generateId();
         var strtT = JSON.stringify([2,id,"StartTransaction", {
             "connectorId": connectorId,
             "idTag": tagId,
             "timestamp": formatDate(new Date()),
-            "meterStart": meterValue,
+            "meterStart": mv,
             "reservationId": reservationId
         }]);
+        this.logMsg("Starting Transaction for tag "+tagId+" (connector:"+connectorId+", meter value="+mv+")");
         this.wsSendData(strtT);
         this.setConnectorStatus(connectorId,ocpp.CONN_CHARGING);
     }
@@ -255,30 +250,31 @@ export default class ChargePoint {
     //
     // Send a StopTransaction call to the OCPP Server
     // @param tagId the id of the RFID tag currently authorized on the CP
-    // @param meterValue the current value of the CP meter
     //
-    stopTransaction(tagId,meterValue=0){
+    stopTransaction(tagId){
         var transactionId=getSessionKey("TransactionId");
-        this.stopTransactionWithId(transactionId,tagId,meterValue);
+        this.stopTransactionWithId(transactionId,tagId);
     }
     
     //
     // Send a StopTransaction call to the OCPP Server
     // @param transactionId the id of the transaction to stop
     // @param tagId the id of the RFID tag currently authorized on the CP
-    // @param meterValue the current value of the CP meter
     //
-    stopTransactionWithId(transactionId,tagId,meterValue=0){
+    stopTransactionWithId(transactionId,tagId="DEADBEEF"){
         this.setLastAction("stopTransaction");
         this.setStatus(ocpp.CP_AUTHORIZED);
-        this.logMsg("Stopping Transaction with id "+transactionId+" (meterValue="+meterValue+")");
+        var mv=this.meterValue();
+        this.logMsg("Stopping Transaction with id "+transactionId+" (meterValue="+mv+")");
         var id=generateId();
-        var stpT = JSON.stringify([2, id, "StopTransaction",{
+        var stopParams = {           
             "transactionId": transactionId,
-            "idTag": tagId,
             "timestamp": formatDate(new Date()),
-            "meterStop": meterValue
-        }]);
+            "meterStop": mv};
+        if (!isEmpty(tagId)) {
+            stopParams["idTag"]=tagId;
+        }
+        var stpT = JSON.stringify([2, id, "StopTransaction",stopParams]);
         this.wsSendData(stpT);
         this.setConnectorStatus(1,ocpp.CONN_AVAILABLE);
     }
@@ -303,19 +299,6 @@ export default class ChargePoint {
         }]);
         this.wsSendData(bn_req);
     }
-
-    
-    //
-    // Update status of given connector
-    // @param connectorId MUST be 1 for now
-    // @param new status for connector
-    //
-    setConnectorStatus(connectorId,newStatus)
-    {
-        setSessionKey(ocpp.KEY_CONN1_STATUS,newStatus);
-        $('.CP1_STATUS').val(newStatus).change();
-    }
-    
 
     // @todo: Shitty code to remove asap => real transaction support
     setLastAction(action) {
@@ -389,7 +372,7 @@ export default class ChargePoint {
             //
             // OnOpen Callback
             //
-            this._websocket.onopen = function(authorizationData) {
+            this._websocket.onopen = function(evt) {
                 self.setStatus(ocpp.CP_CONNECTING);
                 self.bootNotification();
             }
@@ -501,7 +484,26 @@ export default class ChargePoint {
         this.wsSendData(mvreq);
     }
     
-    sendConnectorStatus(c,st) {
+    //
+    // Update status of given connector
+    // @param connectorId MUST be 1 for now
+    // @param new status for connector
+    // @param updateServer if true, also send a StatusNotification to server
+    //
+    setConnectorStatus(connectorId,newStatus,updateServer=false)
+    {
+        setSessionKey(ocpp.KEY_CONN1_STATUS,newStatus);
+        if(updateServer) {
+            this.sendStatusNotification(connectorId,newStatus);
+        }
+    }
+    
+    //
+    // Send a StatusNotification to the server with the new status of the specified connector
+    // @param c The connector id (0 for CP, 1 for connector 1, etc...)
+    // @param st The connector status
+    //
+    sendStatusNotification(c,st) {
         this.setLastAction("StatusNotification");
         var id=generateId();
         var sn_req = JSON.stringify([2, id, "StatusNotification", {

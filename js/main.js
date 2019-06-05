@@ -1,9 +1,4 @@
 "use strict";
-/*eslint-env es6*/
-/*eslint-env browser*/
-/*eslint prefer-const: "error"*/
-/*eslint no-console: ["error", { allow: ["log","warn","error"] }] */
-/*eslint no-unused-vars: ["error", {"args": "none"}]*/
 /*global $ */
 
 import ChargePoint from './ocpp_chargepoint.js';
@@ -164,11 +159,13 @@ $( document ).ready(function() {
     });
 
     $('#start').click(function () {
-        _cp.startTransaction($("#TAG").val(),$("#metervalue").val());
+        _cp.setMeterValue($("#metervalue").val(),false);
+        _cp.startTransaction($("#TAG").val());
     });
 
     $('#stop').click(function () {
-        _cp.stopTransaction($("#TAG").val(),$("#metervalue").val());
+        _cp.setMeterValue($("#metervalue").val(),false);
+        _cp.stopTransaction($("#TAG").val());
     });
 
     $('#mv').click(function () {
@@ -188,10 +185,10 @@ $( document ).ready(function() {
     });
 
     $('#status0').click(function () {
-        _cp.sendConnectorStatus(0,$("#CP0_STATUS").val())
+        _cp.sendStatusNotification(0,$("#CP0_STATUS").val())
     });
     $('#status1').click(function () {
-        _cp.sendConnectorStatus(1,$("#CP1_STATUS").val())
+        _cp.sendStatusNotification(1,$("#CP1_STATUS").val())
     });
 
     $('#data_transfer').click(function () {
