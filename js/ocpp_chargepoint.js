@@ -447,7 +447,7 @@ export default class ChargePoint {
         } 
         else {
 
-            this._websocket = new WebSocket(wsurl + "" + cpid, ["ocpp1.6", "ocpp1.5"]);
+            this._websocket = new WebSocket(wsurl + "" + cpid, ["ocpp1.6", "ocpp1.5","echo-protocol"]);
             var self = this
 
             //
@@ -560,7 +560,12 @@ export default class ChargePoint {
         var meter=getSessionKey(ocpp.KEY_METER_VALUE);
         var id=generateId();
         var ssid = getSessionKey('TransactionId');
-        mvreq = JSON.stringify([2, id, "MeterValues", {"connectorId": c, "transactionId": ssid, "meterValue": [{"timestamp": formatDate(new Date()), "sampledValue": [{"value": meter}]}]}]);
+        var transid = document.getElementById('transactionId').value;
+        var metervalue = document.getElementById('metervalue').value;
+        console.log('********mter value')
+        console.log(metervalue)
+        var meterdata = [2,id,"MeterValues",{"connectorId":1,"meterValue":[{"sampledValue":[{"measurand":"Current.Import","phase":"L1","unit":"A","value":"0.0"},{"measurand":"Current.Import","phase":"L2","unit":"A","value":"0.0"},{"measurand":"Current.Import","phase":"L3","unit":"A","value":"0.0"},{"measurand":"Voltage","phase":"L1","unit":"V","value":"0.0"},{"measurand":"Voltage","phase":"L2","unit":"V","value":"0.0"},{"measurand":"Voltage","phase":"L3","unit":"V","value":"0.0"},{"measurand":"Energy.Active.Import.Register","unit":"Wh","value":""+metervalue+""},{"measurand":"Power.Active.Import","unit":"W","value":"0.0"}],"timestamp":"2021-06-29T06:45:30Z"}],"transactionId":""+transid+""}];
+        mvreq = JSON.stringify(meterdata);
         this.logMsg("Send Meter Values: "+meter+" (connector " +c+")");
         this.wsSendData(mvreq);
     }
