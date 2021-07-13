@@ -37,15 +37,15 @@ function keyDefaultValue(key) {
     var v=""
     switch(key) {
         case WSURL:
-            v="wss://localhost:1337/";
-            // v="wss://portal.getelectric.com.au:1337/";
+            // v="wss://localhost:1337/";
+            v="wss://portal.getelectric.com.au:1337/";
             // v="ws://localhost:8180/steve/websocket/CentralSystemService/";
             break;
         case CPID:
-            v='CP01';
+            v='SNTESTSIMULATOR';
             break;
         case TAGID:
-            v='DEADBEEF';
+            v='SNTESTSIMULATOR';
             break;
     }
     return v
