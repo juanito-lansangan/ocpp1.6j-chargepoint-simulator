@@ -252,6 +252,7 @@ export default class ChargePoint {
             setSessionKey('TransactionId',transactionId);
             this.setStatus(ocpp.CP_INTRANSACTION,'TransactionId: '+transactionId)
             this.logMsg("Transaction id is "+transactionId);
+            $('#transactionId').val(transactionId)
         }
     }
 
