@@ -22,4 +22,4 @@ services:
     links:
       - app
     ports:
-      - 8086:80
+      - 8086:8086
