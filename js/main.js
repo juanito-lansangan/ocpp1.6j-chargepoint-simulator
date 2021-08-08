@@ -37,9 +37,9 @@ function keyDefaultValue(key) {
     var v=""
     switch(key) {
         case WSURL:
-            // v="wss://localhost:1337/";
+            v="wss://localhost:1337/";
             // v="wss://portal.getelectric.com.au:1337/";
-            v="wss://cms.getelectric.com.au:1337/";
+            // v="wss://cms.getelectric.com.au:1337/";
             // v="ws://localhost:8180/steve/websocket/CentralSystemService/";
             break;
         case CPID:

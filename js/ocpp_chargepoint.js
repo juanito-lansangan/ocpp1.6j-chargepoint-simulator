@@ -161,6 +161,7 @@ export default class ChargePoint {
     handleCallRequest(id,request,payload) {
         var respOk = JSON.stringify([3,id,{"status": "Accepted"}]);
         var connectorId=0;
+
         switch (request) {
             case "Reset":
                 //Reset type can be SOFT, HARD
@@ -239,12 +240,15 @@ export default class ChargePoint {
             }
         }
         else if (la == "Authorize") {
-            if (payload.idTagInfo.status == 'Invalid') {
+
+            if (payload.idTagInfo.status == 'Rejected') {
                 this.logMsg('Authorization failed');
             }
             else {
                 this.logMsg('Authorization OK');
                 this.setStatus(ocpp.CP_AUTHORIZED);
+                const tagId = $('#TAG').val()
+                this.startTransaction(tagId);
             } 
         }
         else if (la == "startTransaction") {
@@ -498,6 +502,7 @@ export default class ChargePoint {
                         self.handleCallRequest(id,request,payload);
                         break;
                     case 3: // CALLRESULT 
+                        console.log('here');
                         self.handleCallResult(ddata[2]);
                         break;
                     case 4: // CALLERROR
