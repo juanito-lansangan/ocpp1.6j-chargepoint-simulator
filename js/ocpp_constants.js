@@ -28,6 +28,8 @@ export const CP_INTRANSACTION = 'in_transaction';
 export const CONN_AVAILABLE   = 'Available';
 export const CONN_CHARGING    = 'Charging';
 export const CONN_UNAVAILABLE = 'Unavailable';
+export const CONN_PLUG_IN = 'plugInGun';
+export const CONN_PLUG_OUT = 'plugOutGun';
 
 // Availability status
 export const AVAILABITY_OPERATIVE   = 'Operative';

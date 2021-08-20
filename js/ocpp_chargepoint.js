@@ -585,6 +585,19 @@ export default class ChargePoint {
         var key = ocpp.KEY_CONN_STATUS + c;
         return getSessionKey(key);
     }
+
+    connectorStatusInfo(newStatus) {
+
+        if(newStatus == 'plugInGun') {
+            return "{\"reason\":\"plugInGun\",\"cpv\":912,\"rv\":0}";
+        } 
+        
+        if(newStatus == 'plugOutGun') {
+            return "{\"reason\":\"plugOutGun\",\"cpv\":1237,\"rv\":0}";
+        } 
+
+        return "";
+    }
     
     //
     // Update status of given connector
@@ -592,12 +605,19 @@ export default class ChargePoint {
     // @param new status for connector
     // @param updateServer if true, also send a StatusNotification to server
     //
-    setConnectorStatus(c,newStatus,updateServer=false) {
+    setConnectorStatus(c,newStatus,updateServer=false,info="") {
         var key = ocpp.KEY_CONN_STATUS + c;
         setSessionKey(key,newStatus);
+        this.connectorStatusInfo(newStatus);
+
         if(updateServer) {
             this.sendStatusNotification(c,newStatus);
+        } else if(newStatus == 'plugInGun') {
+            this.sendStatusNotification(c,newStatus);
+        } else if(newStatus == 'plugOutGun') {
+            this.sendStatusNotification(c,newStatus);
         }
+
     }
     
     //
@@ -612,7 +632,7 @@ export default class ChargePoint {
             "connectorId": c,
             "status": st,
             "errorCode": "NoError",
-            "info": "",
+            "info": this.connectorStatusInfo(st),
             "timestamp": formatDate(new Date()),
             "vendorId": "",
             "vendorErrorCode": ""

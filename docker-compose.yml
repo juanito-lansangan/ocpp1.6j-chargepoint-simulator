@@ -9,11 +9,13 @@ services:
     volumes:
       - .:/var/www/html
       - ./docker/php/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+    restart: unless-stopped
     environment:
       APP_ENV: local
 
   nginx:
     image: nginx:alpine
+    restart: unless-stopped
     container_name: ocpp_simulator_nginx
     volumes:
       - .:/var/www/html
@@ -22,4 +24,4 @@ services:
     links:
       - app
     ports:
-      - 8086:8086
+      - 8086:80
