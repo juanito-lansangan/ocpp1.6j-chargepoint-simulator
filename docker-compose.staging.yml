@@ -19,8 +19,8 @@ services:
     container_name: ocpp_simulator_nginx
     volumes:
       - .:/var/www/html
-      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
-    #  - /etc/letsencrypt:/etc/ca-certificates
+      - ./docker/nginx-staging.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/ca-certificates
     links:
       - app
     ports:
