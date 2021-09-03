@@ -252,11 +252,17 @@ export default class ChargePoint {
             } 
         }
         else if (la == "startTransaction") {
-            var transactionId = payload.transactionId;
-            setSessionKey('TransactionId',transactionId);
-            this.setStatus(ocpp.CP_INTRANSACTION,'TransactionId: '+transactionId)
-            this.logMsg("Transaction id is "+transactionId);
-            $('#transactionId').val(transactionId)
+            if (payload.idTagInfo.status == 'Rejected') {
+                this.logMsg('Transaction failed');
+            } else {
+                var transactionId = payload.transactionId;
+                setSessionKey('TransactionId',transactionId);
+                this.setStatus(ocpp.CP_INTRANSACTION,'TransactionId: '+transactionId)
+                this.logMsg("Transaction id is "+transactionId);
+                $('#transactionId').val(transactionId)
+                // this.setStatus(ocpp.CP_INTRANSACTION);
+                this.setConnectorStatus(1,ocpp.CONN_CHARGING);
+            }
         }
     }
 
@@ -289,7 +295,7 @@ export default class ChargePoint {
     //
     startTransaction(tagId,connectorId=1,reservationId=0){
         this.setLastAction("startTransaction");
-        this.setStatus(ocpp.CP_INTRANSACTION);
+        // this.setStatus(ocpp.CP_INTRANSACTION);
         var mv = this.meterValue();
         var id=generateId();
         var strtT = JSON.stringify([2,id,"StartTransaction", {
@@ -301,7 +307,7 @@ export default class ChargePoint {
         }]);
         this.logMsg("Starting Transaction for tag "+tagId+" (connector:"+connectorId+", meter value="+mv+")");
         this.wsSendData(strtT);
-        this.setConnectorStatus(connectorId,ocpp.CONN_CHARGING);
+        // this.setConnectorStatus(connectorId,ocpp.CONN_CHARGING);
     }
 
     //
