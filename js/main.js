@@ -72,6 +72,7 @@ function statusChangeCb(s,msg) {
             $('#send').hide();
             $('#start').hide();
             $('#stop').hide();
+            $('#stopEvCharging').hide();
             $('#heartbeat').hide();
             $('#mv').hide();
             $('#status0').hide();
@@ -92,6 +93,7 @@ function statusChangeCb(s,msg) {
             $('#send').show();
             $('#start').show();
             $('#stop').show();
+            $('#stopEvCharging').show();
             $('#heartbeat').show();
             $('#mv').show();
             $('#status0').show();
@@ -136,7 +138,6 @@ function availabilityChangeCb(c,s) {
 // (attach callbacks to each button and wait for user action)
 //
 $( document ).ready(function() {
-
     _cp.setLoggingCallback(logMsg);
     _cp.setStatusChangeCallback(statusChangeCb);
     _cp.setAvailabilityChangeCallback(availabilityChangeCb);
@@ -179,6 +180,11 @@ $( document ).ready(function() {
     $('#stop').click(function () {
         _cp.setMeterValue($("#metervalue").val(),false);
         _cp.stopTransaction($("#TAG").val());
+    });
+
+    $('#stopEvCharging').click(function () {
+        _cp.setConnectorStatus(0,"SuspendedEV",true);
+        _cp.sendStatusNotification();
     });
 
     $('#mv').click(function () {

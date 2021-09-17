@@ -602,6 +602,10 @@ export default class ChargePoint {
             return "{\"reason\":\"plugOutGun\",\"cpv\":1237,\"rv\":0}";
         } 
 
+        if(newStatus == 'SuspendedEV') {
+            return "{\"reason\":\"S2Opened\",\"cpv\":1237,\"rv\":0}";
+        } 
+
         return "";
     }
     
@@ -616,13 +620,7 @@ export default class ChargePoint {
         setSessionKey(key,newStatus);
         this.connectorStatusInfo(newStatus);
 
-        if(updateServer) {
-            this.sendStatusNotification(c,newStatus);
-        } else if(newStatus == 'plugInGun') {
-            this.sendStatusNotification(c,newStatus);
-        } else if(newStatus == 'plugOutGun') {
-            this.sendStatusNotification(c,newStatus);
-        }
+        this.sendStatusNotification(c,newStatus);
 
     }
     
