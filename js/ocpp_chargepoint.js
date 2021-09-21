@@ -593,7 +593,7 @@ export default class ChargePoint {
     }
 
     connectorStatusInfo(newStatus) {
-
+        console.log(newStatus);
         if(newStatus == 'plugInGun') {
             return "{\"reason\":\"plugInGun\",\"cpv\":912,\"rv\":0}";
         } 
@@ -604,7 +604,11 @@ export default class ChargePoint {
 
         if(newStatus == 'SuspendedEV') {
             return "{\"reason\":\"S2Opened\",\"cpv\":1237,\"rv\":0}";
-        } 
+        }
+
+        if(newStatus == 'Finishing') {
+            return "{\"reason\":\"fullRmtStop\",\"cpv\":1237,\"rv\":0}";
+        }
 
         return "";
     }
