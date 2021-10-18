@@ -577,7 +577,54 @@ export default class ChargePoint {
         var metervalue = document.getElementById('metervalue').value;
         console.log('********mter value')
         console.log(metervalue)
-        var meterdata = [2,id,"MeterValues",{"connectorId":1,"meterValue":[{"sampledValue":[{"measurand":"Current.Import","phase":"L1","unit":"A","value":"0.0"},{"measurand":"Current.Import","phase":"L2","unit":"A","value":"0.0"},{"measurand":"Current.Import","phase":"L3","unit":"A","value":"0.0"},{"measurand":"Voltage","phase":"L1","unit":"V","value":"0.0"},{"measurand":"Voltage","phase":"L2","unit":"V","value":"0.0"},{"measurand":"Voltage","phase":"L3","unit":"V","value":"0.0"},{"measurand":"Energy.Active.Import.Register","unit":"Wh","value":""+metervalue+""},{"measurand":"Power.Active.Import","unit":"W","value":"0.0"}],"timestamp":"2021-06-29T06:45:30Z"}],"transactionId":""+transid+""}];
+        // var meterdata = [2,id,"MeterValues",{"connectorId":1,"meterValue":[{"sampledValue":[{"measurand":"Current.Import","phase":"L1","unit":"A","value":"0.0"},{"measurand":"Current.Import","phase":"L2","unit":"A","value":"0.0"},{"measurand":"Current.Import","phase":"L3","unit":"A","value":"0.0"},{"measurand":"Voltage","phase":"L1","unit":"V","value":"0.0"},{"measurand":"Voltage","phase":"L2","unit":"V","value":"0.0"},{"measurand":"Voltage","phase":"L3","unit":"V","value":"0.0"},{"measurand":"Energy.Active.Import.Register","unit":"Wh","value":""+metervalue+""},{"measurand":"Power.Active.Import","unit":"W","value":"0.0"}],"timestamp":"2021-06-29T06:45:30Z"}],"transactionId":""+transid+""}];
+        const meterdata = [
+            2,
+            "131",
+            "MeterValues",
+            {
+              "connectorId": 1,
+              "meterValue": [
+                {
+                  "timestamp": "2021-10-15T05:58:09Z",
+                  "sampledValue": [
+                    {
+                      "measurand": "Current.Offered",
+                      "unit": "A",
+                      "value": "32.0",
+                      "context": "Sample.Periodic"
+                    },
+                    {
+                      "measurand": "Current.Import",
+                      "unit": "A",
+                      "phase": "L1",
+                      "value": "0.3"
+                    },
+                    {
+                      "measurand": "Voltage",
+                      "unit": "V",
+                      "phase": "L1",
+                      "value": "236.2",
+                      "context": "Sample.Periodic"
+                    },
+                    {
+                      "measurand": "Energy.Active.Import.Register",
+                      "unit": "Wh",
+                      "value": "534.0",
+                      "context": "Sample.Periodic"
+                    },
+                    {
+                      "measurand": "Power.Active.Import",
+                      "unit": "W",
+                      "value": "73.0",
+                      "context": "Sample.Periodic"
+                    }
+                  ]
+                }
+              ],
+              "transactionId": 89
+            }
+          ];
         mvreq = JSON.stringify(meterdata);
         this.logMsg("Send Meter Values: "+meter+" (connector " +c+")");
         this.wsSendData(mvreq);

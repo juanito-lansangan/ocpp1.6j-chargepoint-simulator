@@ -114,7 +114,7 @@ function statusChangeCb(s,msg) {
             $('#mv').show();
             $('#status0').show();
             $('#status1').show();
-            // RFU $('#data_transfer').show();
+            $('#data_transfer').show();
             break;
 
         case ocpp.CP_AUTHORIZED:
@@ -148,7 +148,14 @@ function availabilityChangeCb(c,s) {
     var dom_id="#STATUS_CON"+c;
     $(dom_id).val(_cp.connectorStatus(c));
 }
-
+function generateId() {
+    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var id = "";
+    for (var i = 0; i < 36; i++) {
+        id += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return id;
+}
 //
 // Entry point of the simulator
 // (attach callbacks to each button and wait for user action)
@@ -233,16 +240,12 @@ $( document ).ready(function() {
     });
 
     $('#data_transfer').click(function () {
-        /*
-        setLastAction("DataTransfer");
+        
+        _cp.setLastAction("DataTransfer");
         var id=generateId();
-        var DT = JSON.stringify([2,id, "DataTransfer", {
-            "vendorId": "rus.avt.cp",
-            "messageId": "GetChargeInstruction",
-            "data": ""
-        }]);
-        wsSendData(DT);
-        */
+        var DT = JSON.stringify([2,id, "DataTransfer", {"vendorId":"EN+","messageId":"gatewayInfo","data":{"SN":"SN10052108234424","fwVer":"V3.2.506","gateCode":"91"}}]);
+        _cp.wsSendData(DT);
+        
     });
 
     $('#connect').on('change', function () {
