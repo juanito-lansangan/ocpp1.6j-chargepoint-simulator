@@ -622,7 +622,7 @@ export default class ChargePoint {
                   ]
                 }
               ],
-              "transactionId": 89
+              "transactionId": transid
             }
           ];
         mvreq = JSON.stringify(meterdata);
