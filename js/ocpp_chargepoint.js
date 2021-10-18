@@ -297,13 +297,14 @@ export default class ChargePoint {
     startTransaction(tagId,connectorId=1,reservationId=0){
         this.setLastAction("startTransaction");
         // this.setStatus(ocpp.CP_INTRANSACTION);
-        var mv = this.meterValue();
+        // var mv = this.meterValue();
         var id=generateId();
+        var meterStartValue = document.getElementById('meterStartValue').value;
         var strtT = JSON.stringify([2,id,"StartTransaction", {
             "connectorId": connectorId,
             "idTag": tagId,
             "timestamp": formatDate(new Date()),
-            "meterStart": mv,
+            "meterStart": meterStartValue,
             "reservationId": reservationId
         }]);
         this.logMsg("Starting Transaction for tag "+tagId+" (connector:"+connectorId+", meter value="+mv+")");
@@ -610,7 +611,7 @@ export default class ChargePoint {
                     {
                       "measurand": "Energy.Active.Import.Register",
                       "unit": "Wh",
-                      "value": "534.0",
+                      "value": metervalue,
                       "context": "Sample.Periodic"
                     },
                     {
