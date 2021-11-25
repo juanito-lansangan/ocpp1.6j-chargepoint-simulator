@@ -213,6 +213,13 @@ export default class ChargePoint {
                 //$('#yellow').show();
                 //logMsg("Connector status changed to: "+connector_locked);
                 break;
+            case "SetChargingProfile":
+                this.wsSendData(respOk);
+                // connector_locked = false;
+                // $('.indicator').hide();
+                //$('#yellow').show();
+                //logMsg("Connector status changed to: "+connector_locked);
+                break;
 
             default:
                 var error = JSON.stringify([4,id,"NotImplemented"]);
