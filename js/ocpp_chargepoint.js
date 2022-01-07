@@ -220,6 +220,13 @@ export default class ChargePoint {
                 //$('#yellow').show();
                 //logMsg("Connector status changed to: "+connector_locked);
                 break;
+            case "ClearChargingProfile":
+                this.wsSendData(respOk);
+                // connector_locked = false;
+                // $('.indicator').hide();
+                //$('#yellow').show();
+                //logMsg("Connector status changed to: "+connector_locked);
+                break;
 
             default:
                 var error = JSON.stringify([4,id,"NotImplemented"]);
@@ -597,35 +604,63 @@ export default class ChargePoint {
                   "timestamp": "2021-10-15T05:58:09Z",
                   "sampledValue": [
                     {
-                      "measurand": "Current.Offered",
-                      "unit": "A",
-                      "value": "32.0",
-                      "context": "Sample.Periodic"
+                    "measurand": "Current.Offered",
+                    "unit": "A",
+                    "value": "32.0",
+                    "context": "Sample.Periodic"
                     },
                     {
-                      "measurand": "Current.Import",
-                      "unit": "A",
-                      "phase": "L1",
-                      "value": "0.3"
+                    "measurand": "Current.Import",
+                    "unit": "A",
+                    "phase": "L1",
+                    "value": "14.5"
                     },
                     {
-                      "measurand": "Voltage",
-                      "unit": "V",
-                      "phase": "L1",
-                      "value": "236.2",
-                      "context": "Sample.Periodic"
+                    "measurand": "Current.Import",
+                    "unit": "A",
+                    "phase": "L2",
+                    "value": "14.9",
+                    "context": "Sample.Periodic"
                     },
                     {
-                      "measurand": "Energy.Active.Import.Register",
-                      "unit": "Wh",
-                      "value": metervalue,
-                      "context": "Sample.Periodic"
+                    "measurand": "Current.Import",
+                    "unit": "A",
+                    "phase": "L3",
+                    "value": "15.5",
+                    "context": "Sample.Periodic"
                     },
                     {
-                      "measurand": "Power.Active.Import",
-                      "unit": "W",
-                      "value": "73.0",
-                      "context": "Sample.Periodic"
+                    "measurand": "Voltage",
+                    "unit": "V",
+                    "phase": "L1",
+                    "value": "237.9",
+                    "context": "Sample.Periodic"
+                    },
+                    {
+                    "measurand": "Voltage",
+                    "unit": "V",
+                    "phase": "L2",
+                    "value": "239.1",
+                    "context": "Sample.Periodic"
+                    },
+                    {
+                    "measurand": "Voltage",
+                    "unit": "V",
+                    "phase": "L3",
+                    "value": "237.6",
+                    "context": "Sample.Periodic"
+                    },
+                    {
+                    "measurand": "Energy.Active.Import.Register",
+                    "unit": "Wh",
+                    "value": metervalue,
+                    "context": "Sample.Periodic"
+                    },
+                    {
+                    "measurand": "Power.Active.Import",
+                    "unit": "W",
+                    "value": "10793.0",
+                    "context": "Sample.Periodic"
                     }
                   ]
                 }
