@@ -261,7 +261,8 @@ export default class ChargePoint {
             else {
                 this.logMsg('Authorization OK');
                 this.setStatus(ocpp.CP_AUTHORIZED);
-                const tagId = $('#TAG').val().padEnd(16, "F")
+                // const tagId = $('#TAG').val().padEnd(16, "F")
+                const tagId = $('#TAG').val()
                 console.log(tagId);
                 this.startTransaction(tagId);
             } 
