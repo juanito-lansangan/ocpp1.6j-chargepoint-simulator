@@ -123,10 +123,21 @@
                                     <div class="form-group">
                                         <label for="STATUS_CON0">Charge Point Status:</label>
                                         <div class="d-flex">
+                                            <select id="CONNECTOR_ID" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                                <option selected value="1">Connector 1</option>
+                                                <option selected value="2">Connector 2</option>
+                                            </select>
+                                            <select id="STATUS_NOTIFICATION" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                                <option selected value="Available">Available</option>
+                                                <option selected value="Preparing">Preparing</option>
+                                                <option selected value="Charging">Charging</option>
+                                                <option selected value="Finishing">Finishing</option>
+                                            </select>
                                             <select id="STATUS_CON0" class="form-control" style="max-width: 16ch; margin-right:1ch;">
+                                                <option selected value="None">None</option>
                                                 <option selected value="plugInGun">Plug In</option>
                                                 <option selected value="plugOutGun">Plug Out</option>
-                                                <option selected value="Finishing">Full Charge</option>
+                                                <option selected value="fullRmtStop">Full Charge</option>
                                             </select>
                                             <button id="status0" type="button" class="btn btn-primary">Status Notification</button>
                                         </div>

@@ -702,7 +702,11 @@ export default class ChargePoint {
             return "{\"reason\":\"fullRmtStop\",\"cpv\":1237,\"rv\":0}";
         }
 
-        return "";
+        if(newStatus == 'fullRmtStop') {
+            return "{\"reason\":\"fullRmtStop\",\"cpv\":1237,\"rv\":0}";
+        }
+
+        return "{\"reason\":\"None\",\"cpv\":1237,\"rv\":0}";
     }
     
     //
@@ -729,8 +733,8 @@ export default class ChargePoint {
         this.setLastAction("StatusNotification");
         var id=generateId();
         var sn_req = JSON.stringify([2, id, "StatusNotification", {
-            "connectorId": c,
-            "status": st,
+            "connectorId": $('#CONNECTOR_ID').val(),
+            "status": $('#STATUS_NOTIFICATION').val(),
             "errorCode": "NoError",
             "info": this.connectorStatusInfo(st),
             "timestamp": formatDate(new Date()),
