@@ -686,27 +686,28 @@ export default class ChargePoint {
 
     connectorStatusInfo(newStatus) {
         console.log(newStatus);
-        if(newStatus == 'plugInGun') {
-            return "{\"reason\":\"plugInGun\",\"cpv\":912,\"rv\":0}";
-        } 
+        // if(newStatus == 'plugInGun') {
+        //     return "{\"reason\":\"plugInGun\",\"cpv\":912,\"rv\":0}";
+        // } 
         
-        if(newStatus == 'plugOutGun') {
-            return "{\"reason\":\"plugOutGun\",\"cpv\":1237,\"rv\":0}";
-        } 
+        // if(newStatus == 'plugOutGun') {
+        //     return "{\"reason\":\"plugOutGun\",\"cpv\":1237,\"rv\":0}";
+        // } 
 
-        if(newStatus == 'SuspendedEV') {
-            return "{\"reason\":\"S2Opened\",\"cpv\":1237,\"rv\":0}";
-        }
+        // if(newStatus == 'SuspendedEV') {
+        //     return "{\"reason\":\"S2Opened\",\"cpv\":1237,\"rv\":0}";
+        // }
 
-        if(newStatus == 'Finishing') {
-            return "{\"reason\":\"fullRmtStop\",\"cpv\":1237,\"rv\":0}";
-        }
+        // if(newStatus == 'Finishing') {
+        //     return "{\"reason\":\"fullRmtStop\",\"cpv\":1237,\"rv\":0}";
+        // }
 
-        if(newStatus == 'fullRmtStop') {
-            return "{\"reason\":\"fullRmtStop\",\"cpv\":1237,\"rv\":0}";
-        }
+        // if(newStatus == 'fullRmtStop') {
+        //     return "{\"reason\":\"fullRmtStop\",\"cpv\":1237,\"rv\":0}";
+        // }
+        return JSON.stringify({reason:newStatus,cpv:1237,rv:0});
 
-        return "{\"reason\":\"None\",\"cpv\":1237,\"rv\":0}";
+        // return "{\"reason\":\"None\",\"cpv\":1237,\"rv\":0}";
     }
     
     //
