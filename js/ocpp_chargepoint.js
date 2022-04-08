@@ -316,7 +316,7 @@ export default class ChargePoint {
         var id=generateId();
         var meterStartValue = document.getElementById('meterStartValue').value;
         var strtT = JSON.stringify([2,id,"StartTransaction", {
-            "connectorId": connectorId,
+            "connectorId": $('#CONNECTOR_ID').val(),
             "idTag": tagId,
             "timestamp": formatDate(new Date()),
             "meterStart": meterStartValue,
